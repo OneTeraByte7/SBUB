@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const countries = [
   {
@@ -48,53 +49,78 @@ const countries = [
   },
 ];
 
-export default function CountriesSelector() {
-  const [activeIndex, setActiveIndex] = useState(0);
+export default function VerticalBarGraphCountries() {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleActive = (idx) => {
+    setActiveIndex((prev) => (prev === idx ? null : idx));
+  };
 
   return (
-    <section className="max-w-7xl mx-auto p-6 flex h-72 bg-white rounded-lg shadow-lg overflow-hidden">
-      {/* Left side: Expanded content of selected country */}
-      <div className="flex-1 bg-gray-50 p-8 rounded-l-lg overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">
-          Visa & Immigration services to {countries[activeIndex].name}
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-gray-700">
-          {countries[activeIndex].details.map((detail, i) => (
-            <li key={i}>{detail}</li>
-          ))}
-        </ul>
-      </div>
+    <section className="max-w-full p-6 bg-white rounded-lg shadow-lg select-none" style={{ height: 400 }}>
+      <h2 className="text-3xl font-bold mb-8 text-center">Select a Country</h2>
 
-      {/* Right side: vertical country names */}
-      <div className="flex flex-col w-24 bg-blue-700 rounded-r-lg text-white select-none">
-        {countries.map((country, idx) => {
-          const isActive = idx === activeIndex;
-          return (
-            <button
-              key={country.name}
-              onClick={() => setActiveIndex(idx)}
-              className={`
-                flex items-center justify-center
-                border-b border-blue-600
-                cursor-pointer
-                transition-all duration-300
-                ${isActive ? "bg-blue-900 font-bold" : "bg-blue-700 hover:bg-blue-800"}
-                relative
-                py-4
-                text-center
-                whitespace-nowrap
-                transform
-                origin-bottom-right
-                rotate-90
-                -translate-x-12
-                tracking-wide
-              `}
-              style={{ writingMode: "vertical-rl" }}
-            >
-              {idx + 1} | {country.name}
-            </button>
-          );
-        })}
+      <div className="flex h-full">
+        {/* Left column: vertical bars */}
+        <div className="flex flex-col space-y-4 min-w-[56px]">
+          {countries.map((country, idx) => {
+            const isActive = idx === activeIndex;
+            return (
+              <button
+                key={country.name}
+                onClick={() => toggleActive(idx)}
+                className={`relative bg-gradient-to-r from-blue-400 to-blue-600
+                  ${
+                    isActive
+                      ? "from-blue-700 to-blue-900 text-white shadow-lg"
+                      : "text-white hover:from-blue-500 hover:to-blue-700"
+                  }
+                  rounded-l-lg
+                  h-16 w-14
+                  font-semibold
+                  select-none
+                  transition-colors
+                  duration-300
+                  flex items-center justify-center
+                  whitespace-normal
+                  px-1
+                `}
+                aria-expanded={isActive}
+                aria-controls={`details-${idx}`}
+                type="button"
+                style={{ writingMode: "vertical-rl", textOrientation: "mixed", textAlign: "center" }}
+              >
+                {idx + 1} | {country.name}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right side: info panel */}
+        <div className="flex-1 ml-6 relative">
+          <AnimatePresence>
+            {activeIndex !== null && (
+              <motion.div
+                key={activeIndex}
+                id={`details-${activeIndex}`}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.3 }}
+                className="bg-blue-50 border border-blue-300 rounded-lg p-6 text-blue-900 shadow-lg h-full overflow-auto"
+              >
+                <h3 className="font-semibold mb-4 text-2xl">
+                  Visa & Immigration services to {countries[activeIndex].name}
+                </h3>
+                <ul className="list-disc list-inside text-blue-800 text-lg space-y-2">
+                  {countries[activeIndex].details.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );
