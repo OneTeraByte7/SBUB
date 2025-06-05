@@ -1,9 +1,8 @@
-// src/components/Navbar.jsx
 import { motion } from "framer-motion";
 import { useState } from "react";
 
 const countries = [
-  { name: "USA", flag: "" },
+  { name: "USA", flag: "🇺🇸" },
   { name: "Canada", flag: "🇨🇦" },
   { name: "UK", flag: "🇬🇧" },
   { name: "Australia", flag: "🇦🇺" },
@@ -19,20 +18,64 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="fixed w-full top-0 left-0 bg-white shadow-md z-50"
+      style={{ height: "90px" }} // Increased height here
     >
       <div
-        className="mx-auto px-16 py-6 flex justify-between items-center"
+        className="mx-auto px-16 flex justify-center items-center relative h-full"
         style={{ maxWidth: "98vw" }}
       >
-        <div className="text-red-600 font-bold text-3xl md:text-4xl">
-          SBUB
+        {/* Logo container with relative positioning */}
+        <div
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: "25%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 60,
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0",
+          }}
+        >
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <img
+              src="/assets/logo.jpg"
+              alt="Logo"
+              style={{
+                height: "140px",
+                width: "auto",
+                display: "block",
+              }}
+            />
+            {/* Dark red line overlapping bottom inside logo */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "6px",
+                backgroundColor: "#8B0000",
+                borderTopLeftRadius: "4px",
+                borderTopRightRadius: "4px",
+              }}
+            />
+          </div>
         </div>
 
-        <ul className="hidden md:flex gap-16 text-blue-600 font-semibold text-lg">
+        {/* Empty spacer for left side, reduce width so options move center */}
+        <div style={{ width: "120px" }} />
+
+        {/* Menu options */}
+        <ul
+          className="hidden md:flex gap-16 text-blue-900 font-bold text-lg relative z-50"
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+        >
           <li className="hover:text-red-600 cursor-pointer">Home</li>
           <li className="hover:text-red-600 cursor-pointer">About</li>
 
-          {/* Study Abroad with dropdown */}
           <li
             className="relative cursor-pointer"
             onMouseEnter={() => setShowDropdown(true)}
@@ -43,7 +86,7 @@ export default function Navbar() {
             </span>
 
             {showDropdown && (
-              <ul className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg text-blue-600 font-normal text-base">
+              <ul className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg text-blue-900 font-normal text-base">
                 {countries.map(({ name, flag }) => (
                   <li
                     key={name}
@@ -60,7 +103,7 @@ export default function Navbar() {
           <li className="hover:text-red-600 cursor-pointer">Contact</li>
         </ul>
 
-        <button className="md:hidden text-red-600 text-4xl">☰</button>
+        <button className="md:hidden text-red-600 text-4xl absolute right-16">☰</button>
       </div>
     </motion.nav>
   );
