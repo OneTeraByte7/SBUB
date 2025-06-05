@@ -6,6 +6,7 @@ import AboutSBUB from "./components/AboutSBUB";
 import CountriesList from "./components/CountriesList";
 import TrustedClientsStats from "./components/TrustedClients";
 import Footer from "./components/Footer";
+import Foot from "./components/Foot"; 
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <AboutSBUB />
       <CountriesList />
       <TrustedClientsStats />
+      <Foot />
       <Footer />
 
     </div>

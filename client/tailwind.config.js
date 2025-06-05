@@ -9,6 +9,9 @@ module.exports = {
         primary: "#0D1B2A", // Dark Blue
         accent: "#E63946",  // Red
       },
+      fontFamily: {
+        sans: ['"Cunia"', "ui-sans-serif", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],

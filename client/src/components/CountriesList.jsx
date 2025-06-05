@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { FaPhoneAlt } from "react-icons/fa";
 
 const countries = [
   {
@@ -28,7 +29,7 @@ const countries = [
     details: [
       "Skilled migration and student visas",
       "Documents needed: IELTS scores, employment letters, passport",
-      "Fast track options available",
+      "Fast-track options available",
       "Free eligibility assessment",
     ],
   },
@@ -36,10 +37,10 @@ const countries = [
     name: "Europe",
     image: "/assets/eu.jpg",
     details: [
-      "Work, Student, and Family reunion visas",
+      "Work, Student, and Family-reunion visas",
       "Documents required: Passport, university admission letter, employment contract",
       "Guidance on health insurance and housing",
-      "Language course recommendations",
+      "Language-course recommendations",
     ],
   },
   {
@@ -47,7 +48,7 @@ const countries = [
     image: "/assets/us.jpg",
     details: [
       "Visitor, Work, Student, and Residency visas",
-      "Documents: Passport, job offer letter, medical exams",
+      "Documents: Passport, job-offer letter, medical exams",
       "Step-by-step application support",
       "Post-arrival services and integration advice",
     ],
@@ -55,82 +56,111 @@ const countries = [
 ];
 
 export default function FullWidthHorizontalBars() {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [infoIndex, setInfoIndex] = useState(1);
 
-  const toggleActive = (idx) => {
-    setActiveIndex((prev) => (prev === idx ? null : idx));
+  const handleClick = (idx) => {
+    if (infoIndex === idx) {
+      setInfoIndex(null);
+    } else {
+      setInfoIndex(idx);
+    }
   };
 
   return (
-    <section className="w-full px-4 py-8 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-center mb-8">Select a Country</h2>
+    <section className="w-full px-4 py-8 bg-white rounded-lg shadow-md overflow-x-auto">
+      <h2 className="text-4xl font-bold text-center mb-8">Select a Country</h2>
 
-      <div className="flex w-full space-x-4 overflow-x-auto">
-        {countries.map((country, idx) => {
-          const isActive = idx === activeIndex;
-
-          return (
-            <motion.div
-              key={country.name}
-              layout
-              transition={{ duration: 0.4 }}
-              className={`flex flex-col justify-between items-center rounded-lg overflow-hidden cursor-pointer shadow-md
-                ${isActive ? "bg-red-900 text-white" : "bg-white text-gray-600 hover:bg-red-900 hover:text-white"}
-              `}
-              style={{
-                flex: isActive ? "2 1 0%" : "1 1 0%",
-                height: "450px",
-                minWidth: "100px",
-              }}
-              onClick={() => toggleActive(idx)}
-            >
-              {/* Country Title */}
-              <motion.div
-                layout
-                className={`flex items-center justify-center p-2 font-semibold transition-all duration-300 text-center ${
-                  isActive ? "text-xl py-2" : "rotate-180 text-sm"
+      <div className="flex flex-col w-full border-t border-b border-gray-300">
+        <div className="flex w-full border-b border-gray-300">
+          {countries.map((country, idx) => (
+            <React.Fragment key={country.name}>
+              <div
+                onClick={() => handleClick(idx)}
+                className={`relative flex flex-col items-center cursor-pointer border-l border-gray-300 py-10 px-2 hover:bg-red-900 hover:text-white ${
+                  infoIndex === idx
+                    ? "bg-red-900 text-white"
+                    : "bg-white text-gray-700"
                 }`}
                 style={{
-                  writingMode: isActive ? "horizontal-tb" : "vertical-rl",
-                  textOrientation: "mixed",
+                  width: `${100 / countries.length}%`,
+                  minWidth: "110px",
+                  height: "45vh", // tall relative height
+                  maxHeight: "500px", // optional max height for large screens
                 }}
               >
-                {country.name}
-              </motion.div>
+                {/* Rotated country name vertically */}
+                <span
+                  className="font-extrabold tracking-tight text-2xl mb-4"
+                  style={{
+                    writingMode: "vertical-rl",
+                    transform: "rotate(180deg)",
+                    textAlign: "center",
+                    userSelect: "none",
+                    height: "calc(100% - 60px)",
+                    lineHeight: "1.1",
+                  }}
+                >
+                  {country.name}
+                </span>
+                <img
+                  src={country.image}
+                  alt={`${country.name} flag`}
+                  className="h-14 w-14 rounded-full object-cover shadow mt-auto"
+                />
+              </div>
 
-              {/* Expanded Info */}
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div
-                    key="info"
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-4 text-sm flex flex-col items-start w-full h-full overflow-auto"
-                  >
-                    <h3 className="font-semibold text-white text-lg mb-3">
-                      Visa & Immigration Services to {country.name}
-                    </h3>
+              {infoIndex === idx && (
+                <motion.div
+                  key={"info-" + idx}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full bg-white text-gray-700 p-8 shadow-md rounded-md"
+                  style={{ width: "100%" }}
+                >
+                  <h3 className="font-bold text-3xl mb-6 text-red-900">
+                    Visa & Immigration Services to {countries[idx].name}
+                  </h3>
+                  <ul className="list-disc list-inside space-y-3 text-xl">
+                    {countries[idx].details.map((point, i) => (
+                      <li key={i}>{point}</li>
+                    ))}
+                  </ul>
+                  <button className="mt-8 flex items-center gap-3 bg-red-900 text-white font-semibold px-7 py-4 rounded-full shadow hover:bg-red-800 text-xl">
+                    <FaPhoneAlt />
+                    Contact Us
+                  </button>
+                </motion.div>
+              )}
+            </React.Fragment>
+          ))}
 
-                    <img
-                      src={country.image}
-                      alt={country.name}
-                      className="h-16 w-16 rounded-full object-cover mx-auto mb-4 shadow-md"
-                    />
-
-                    <ul className="list-disc list-inside space-y-1">
-                      {country.details.map((point, i) => (
-                        <li key={i}>{point}</li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+          {infoIndex === countries.length && (
+            <motion.div
+              key={"info-last"}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full bg-white text-gray-700 p-8 shadow-md rounded-md"
+              style={{ width: "100%" }}
+            >
+              <h3 className="font-bold text-3xl mb-6 text-red-900">
+                Visa & Immigration Services to {countries[countries.length - 1].name}
+              </h3>
+              <ul className="list-disc list-inside space-y-3 text-xl">
+                {countries[countries.length - 1].details.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
+              <button className="mt-8 flex items-center gap-3 bg-red-900 text-white font-semibold px-7 py-4 rounded-full shadow hover:bg-red-800 text-xl">
+                <FaPhoneAlt />
+                Contact Us
+              </button>
             </motion.div>
-          );
-        })}
+          )}
+        </div>
       </div>
     </section>
   );

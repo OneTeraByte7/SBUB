@@ -10,23 +10,32 @@ export default function TrustedClientsStats() {
   ];
 
   return (
-    <section className="bg-blue-900 pt-40 pb-6">
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="flex justify-between text-white text-sm font-sans">
+    <section className="bg-blue-900 h-[600px] md:h-[700px] lg:h-[800px] flex items-end pb-20">
+      <div className="w-full max-w-7xl mx-auto px-8">
+        <div className="flex justify-between text-white font-sans">
           {stats.map(({ label, value, suffix }, idx) => (
             <div
               key={idx}
               className="flex flex-col items-center flex-1"
             >
-              <CountUp
-                start={0}
-                end={value}
-                duration={3}
-                separator=","
-                className="text-red-700 text-4xl font-bold"
-              />
-              <span className="text-red-700 text-3xl font-bold">{suffix}</span>
-              <span className="mt-1">{label}</span>
+              <span className="text-red-800 text-7xl font-normal leading-tight">
+                <CountUp
+                  start={0}
+                  end={value}
+                  duration={3}
+                  separator=","
+                  decimals={0}
+                  formattingFn={(val) => {
+                    if (value >= 1000) {
+                      return `${Math.floor(val / 1000)}${suffix}`;
+                    }
+                    return `${val}${suffix}`;
+                  }}
+                />
+              </span>
+              <span className="mt-4 text-white text-2xl font-normal">
+                {label}
+              </span>
             </div>
           ))}
         </div>
@@ -34,4 +43,3 @@ export default function TrustedClientsStats() {
     </section>
   );
 }
-// This component displays statistics about trusted clients, country operations, visas in process, and global agents.

@@ -25,7 +25,7 @@ export default function Navbar() {
         <div
           style={{
             position: "absolute",
-            top: "100%",
+            top: "80%",
             left: "25%",
             transform: "translate(-50%, -50%)",
             zIndex: 60,
