@@ -12,19 +12,28 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section
-      className="h-screen relative flex items-start px-8 pt-20 overflow-hidden bg-center bg-cover"
-      style={{ backgroundImage: "url('/assets/1.jpg')" }}
-    >
+    <section className="h-screen relative flex items-start px-8 pt-20 overflow-hidden bg-center bg-cover">
+
+      {/* Animated background image */}
+      <motion.img
+        src="/assets/1.jpg"
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        initial={{ scale: 1.1, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 2, ease: "easeOut" }}
+      />
+
+      {/* Fully visible flag overlay */}
       <img
         src="/assets/flag.jpg"
         alt="Flag overlay"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-10"
       />
 
-      {/* Slideshow container - absolute positioned bottom right */}
+      {/* Slideshow on right bottom */}
       <div
-        className="absolute bottom-0 right-0 z-10 flex items-end pr-8"
+        className="absolute bottom-0 right-0 z-20 flex items-end pr-8"
         style={{ height: "70vh", maxWidth: "60vw" }}
       >
         <AnimatePresence mode="wait">
@@ -42,8 +51,8 @@ export default function HeroSection() {
         </AnimatePresence>
       </div>
 
-      {/* Text content */}
-      <div className="relative z-20 max-w-7xl w-full mx-auto flex flex-col md:flex-row justify-between gap-10">
+      {/* Hero Text */}
+      <div className="relative z-30 max-w-7xl w-full mx-auto flex flex-col md:flex-row justify-between gap-10">
         <div className="text-white max-w-xl md:flex-1 pt-40">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -89,7 +98,6 @@ export default function HeroSection() {
           </motion.button>
         </div>
 
-        {/* Spacer */}
         <div className="md:flex-1 w-full" />
       </div>
     </section>
